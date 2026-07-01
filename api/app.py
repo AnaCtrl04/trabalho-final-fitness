@@ -4,6 +4,7 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+
 # Carregar dados do arquivo JSON externo
 def carregar_treinos():
     caminho = os.path.join(os.path.dirname(__file__), 'data', 'treinos.json')
