@@ -62,3 +62,5 @@ pytest api/tests/ -v
 Cada push na branch main aciona automaticamente:
 1. Lint com flake8
 2. Execucao dos 4 testes unitarios
+
+Durante o desenvolvimento deste trabalho, foi utilizada assistência de IA (Claude, Anthropic) para apoio na estruturação do código, documentação e revisão técnica. Todo o conteúdo foi compreendido, testado e adaptado
