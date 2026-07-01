@@ -1,0 +1,48 @@
+# Nome do pipeline de Integracao Continua
+name: CI - FitPlatform API
+
+# Gatilho: executa automaticamente a cada push ou pull request na branch main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Definicao dos jobs (tarefas) do pipeline
+jobs:
+  testar:
+    # Sistema operacional onde o pipeline sera executado
+    runs-on: ubuntu-latest
+
+    steps:
+      # Passo 1: Fazer checkout do codigo do repositorio
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      # Passo 2: Configurar a versao do Python
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # Passo 3: Instalar todas as dependencias do projeto
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      # Passo 4 (ETAPA ADICIONAL): Analise estatica com flake8
+      # O flake8 verifica erros de estilo e boas praticas no codigo Python
+      # Isso garante qualidade e padronizacao antes de rodar os testes
+      - name: Lint com flake8
+        run: |
+          # Parar se houver erros criticos de sintaxe
+          flake8 api/app.py --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Verificar estilo com limite de 100 caracteres por linha
+          flake8 api/app.py --count --max-line-length=100 --statistics
+
+      # Passo 5: Executar os testes unitarios com pytest
+      - name: Executar testes unitarios
+        run: pytest api/tests/ -v
+
+      # Passo 6: Exibir resumo dos resultados
+      - name: Resumo dos testes
+        run: pytest api/tests/ --tb=short
